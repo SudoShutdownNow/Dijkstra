@@ -3,7 +3,7 @@
 #include <iomanip>
 using namespace std;
 typedef enum { DG, DN, UDG, UDN } GraphKind;//有向图，有向网，无向图，无向网
-#define MAX 20
+#define MAX 3000
 #define INFINITY 999999
 
 typedef struct Arccell {
@@ -116,16 +116,23 @@ void flushPath(MGraph& g, Path& path)//刷新一次路径
 			minnode = i;
 		}
 	}
-
-	path.pathlist[path.step + 1] = minnode;
-	//path.totalCost += g.arcs[current][minnode].weight;
-	path.isTraveled[minnode] = true;
-	path.step++;
+	if (minnode != 0)
+	{
+		path.pathlist[path.step + 1] = minnode;
+		path.isTraveled[minnode] = true;
+		path.step++;
+	}
+	else
+	{
+		path.isTraveled[current] = true;
+		path.step++;
+	}
+	
 }
 
 void shortPath(MGraph& g)
 {
-	Path mypath;
+	static Path mypath;
 
 	for (int i = 2; i <= g.vexnum; i++)
 	{
@@ -143,16 +150,16 @@ void shortPath(MGraph& g)
 
 int testmain()
 {
-	MGraph G;
+	static MGraph G;
 	CreateGraph(G);
-	for (int i = 1; i <= G.vexnum; i++)
+	/*for (int i = 1; i <= G.vexnum; i++)
 	{
 		for (int j = 1; j <= G.vexnum; j++)
 		{
 			cout << setw(3)<<G.arcs[i][j].weight<<" ";
 		}
 		cout << endl;
-	}
+	}*/
 	shortPath(G);
 	system("pause");
 
