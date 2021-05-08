@@ -4,14 +4,14 @@
 using namespace std;
 typedef enum { DG, DN, UDG, UDN } GraphKind;//有向图，有向网，无向图，无向网
 #define MAX 3000
-#define INFINITY 999999
+#define INFINITY 9999999999
 
 typedef struct Arccell {
 	int weight;//权值，无权图是0/1，有权图是权值
 }AdjMatrix[MAX][MAX];
 
 typedef struct MGraph {
-	int vex[MAX];//顶点
+	//int vex[MAX];//顶点
 	AdjMatrix arcs;//邻接矩阵
 	int vexnum, arcnum;//当前已有的节点数和弧数
 	GraphKind kind;//图类型
@@ -38,6 +38,19 @@ typedef struct Path
 		//totalCost = 0;
 	}
 };
+
+
+int nLCM(int a, int b)
+{           
+	int temp = 0, oraina = a,orainb = b;
+	while (b != 0) {
+		temp = a;
+		a = b;
+		b = temp % b;
+	}
+	return oraina * orainb / a;
+}
+
 
 int LCM(int a, int b)
 {
@@ -72,10 +85,10 @@ void CreateGraph(MGraph& G)
 	G.kind = UDG;
 	G.vexnum = n;
 
-	for (int i = 1; i <= G.vexnum; i++)//把1-n号点装到顶点数组里
+/*	for (int i = 1; i <= G.vexnum; i++)//把1-n号点装到顶点数组里
 	{
 		G.vex[i] = i;
-	}
+	}*/
 
 	for (int a = 1; a <= G.vexnum; a++)//遍历邻接矩阵，建立联系
 	{
@@ -87,7 +100,7 @@ void CreateGraph(MGraph& G)
 			}
 			else
 			{
-				G.arcs[a][b].weight = LCM(a, b);
+				G.arcs[a][b].weight = nLCM(a, b);
 			}
 			
 		}
